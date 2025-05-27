@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-lg buy-confirmation-card border-0">
+                <div class="card-body p-4 p-md-5">
+                    <i class="fas fa-check-circle icon-success fa-4x mb-4"></i>
+                    <h2 class="card-title display-6 fw-bold">Pembelian Berhasil!</h2>
+                    <p class="lead text-muted"><%= message %></p>
+                    <hr class="my-4">
+                    <div class="text-start mb-4 bg-light p-3 rounded">
+                        <h5 class="mb-3"><i class="fas fa-receipt me-2 text-primary"></i>Detail Pesanan:</h5>
+                        <p class="mb-1"><strong><i class="fas fa-cube me-2"></i>Produk:</strong> <%= product.name %></p>
+                        <p class="mb-1"><strong><i class="fas fa-hashtag me-2"></i>Order ID:</strong> <%= order._id %></p>
+                        <p class="mb-0"><strong><i class="fas fa-money-bill-alt me-2"></i>Total Bayar:</strong> Rp <%= order.totalPrice.toLocaleString('id-ID') %></p>
+                    </div>
+
+                    <h4 class="my-4"><i class="fas fa-tasks me-2 text-primary"></i>Langkah Selanjutnya:</h4>
+                    <p class="text-muted">
+                        Untuk proses lebih lanjut dan aktivasi layanan Anda, silakan hubungi kami melalui WhatsApp dengan menyertakan Order ID.
+                    </p>
+                    <a href="<%= whatsappUrl %>" class="btn btn-success btn-lg my-3" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i> Chat via WhatsApp
+                    </a>
+                    <div class="mt-4 d-flex justify-content-center gap-2">
+                        <a href="/user/profile" class="btn btn-outline-primary"><i class="fas fa-history me-1"></i>Riwayat Pesanan</a>
+                        <a href="/products" class="btn btn-outline-secondary"><i class="fas fa-store me-1"></i>Kembali ke Toko</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

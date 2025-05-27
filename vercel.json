@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "name": "qoupay-store",
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/public/(.*)",
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/css/(.*)",
+      "headers": { "Cache-Control": "s-maxage=31536000, immutable" },
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "headers": { "Cache-Control": "s-maxage=31536000, immutable" },
+      "dest": "/public/js/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "headers": { "Cache-Control": "s-maxage=31536000, immutable" },
+      "dest": "/public/images/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/public/favicon.ico"
+    },
+    {
+      "src": "/(.*)",
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      },
+      "dest": "server.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<div class="container auth-form-container">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                        <h2 class="card-title">Buat Akun Baru</h2>
+                        <p class="text-muted">Bergabunglah dengan <%= storeName %> hari ini!</p>
+                    </div>
+                    <form action="/register" method="POST">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username Anda" required>
+                            <label for="username"><i class="fas fa-user me-2"></i>Username</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email Anda" required>
+                            <label for="email"><i class="fas fa-envelope me-2"></i>Email</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                            <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Konfirmasi Password" required>
+                            <label for="confirmPassword"><i class="fas fa-check-double me-2"></i>Konfirmasi Password</label>
+                        </div>
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-user-check me-2"></i>Register</button>
+                        </div>
+                    </form>
+                    <p class="mt-4 text-center text-muted">Sudah punya akun? <a href="/login" class="fw-bold">Login di sini</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

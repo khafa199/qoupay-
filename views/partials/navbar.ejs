@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+             <i class="fas fa-store me-2"></i><%= storeName %>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link <%= pageTitle.toLowerCase().includes('produk') || pageTitle.toLowerCase().includes('home') ? 'active' : '' %>" href="/products"><i class="fas fa-cubes me-1"></i>Produk</a>
+                </li>
+                <% if (currentUser) { %>
+                    <li class="nav-item">
+                        <a class="nav-link <%= pageTitle.toLowerCase().includes('profil') ? 'active' : '' %>" href="/user/profile">
+                            <i class="fas fa-user-circle me-1"></i>Profil
+                            <span class="badge bg-light text-primary ms-1">Rp <%= currentUser.balance.toLocaleString('id-ID') %></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= pageTitle.toLowerCase().includes('deposit') && !pageTitle.toLowerCase().includes('admin') ? 'active' : '' %>" href="/user/deposit"><i class="fas fa-money-bill-wave me-1"></i>Deposit</a>
+                    </li>
+                    <% if (currentUser.role === 'admin') { %>
+                        <li class="nav-item">
+                            <a class="nav-link <%= pageTitle.toLowerCase().includes('admin') ? 'active' : '' %>" href="/admin/dashboard"><i class="fas fa-cogs me-1"></i>Admin Panel</a>
+                        </li>
+                    <% } %>
+                <% } %>
+            </ul>
+            <ul class="navbar-nav">
+                <% if (currentUser) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-alt me-1"></i> <%= currentUser.username %>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+                            <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-id-card me-2"></i>Profil Saya</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link <%= pageTitle.toLowerCase().includes('login') ? 'active' : '' %>" href="/login"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm ms-2 <%= pageTitle.toLowerCase().includes('register') ? 'active' : '' %>" href="/register"><i class="fas fa-user-plus me-1"></i>Register</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>

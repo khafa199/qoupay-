@@ -1,0 +1,99 @@
+<%- include('../partials/header') %>
+
+<div class="container py-md-5">
+    <h2 class="mb-4"><i class="fas fa-id-card me-2"></i>Profil Saya</h2>
+    <hr class="mb-5">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card profile-info-card shadow-sm text-center">
+                <div class="card-body p-4">
+                    <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(user.username) %>&background=6D5BD0&color=fff&size=100&rounded=true" class="rounded-circle mb-3" alt="Avatar">
+                    <h4 class="card-title"><%= user.username %></h4>
+                    <p class="text-muted mb-1"><i class="fas fa-envelope me-1"></i> <%= user.email %></p>
+                    <p class="text-muted"><i class="fas fa-calendar-alt me-1"></i> Bergabung: <%= new Date(user.createdAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                    <hr>
+                    <p class="mb-2">Saldo Saat Ini:</p>
+                    <h3 class="balance-display mb-3">Rp <%= user.balance.toLocaleString('id-ID') %></h3>
+                    <a href="/user/deposit" class="btn btn-primary w-100"><i class="fas fa-plus-circle me-2"></i>Deposit Saldo</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary-light">
+                    <h5 class="mb-0 text-primary"><i class="fas fa-history me-2"></i>Riwayat Pesanan</h5>
+                </div>
+                <div class="card-body">
+                    <% if(orders && orders.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Produk</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Tanggal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% orders.forEach(order => { %>
+                                        <tr>
+                                            <td><small class="text-muted">...<%= order._id.toString().slice(-6) %></small></td>
+                                            <td><%= order.product ? order.product.name : 'Produk Dihapus' %></td>
+                                            <td>Rp <%= order.totalPrice.toLocaleString('id-ID') %></td>
+                                            <td><span class="badge fs-08 py-2 px-2 text-uppercase bg-<%= order.status === 'paid' || order.status === 'completed' ? 'success' : (order.status === 'pending_payment' ? 'warning text-dark' : 'danger') %>"><%= order.status.replace('_', ' ') %></span></td>
+                                            <td><small><%= new Date(order.createdAt).toLocaleDateString('id-ID', {day:'2-digit',month:'short',year:'numeric'}) %></small></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-center text-muted p-3"><i class="fas fa-shopping-bag me-2"></i>Anda belum memiliki riwayat pesanan.</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary-light">
+                    <h5 class="mb-0 text-primary"><i class="fas fa-wallet me-2"></i>Riwayat Deposit</h5>
+                </div>
+                <div class="card-body">
+                    <% if(deposits && deposits.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID Ref</th>
+                                        <th>Metode</th>
+                                        <th>Jumlah</th>
+                                        <th>Status</th>
+                                        <th>Tanggal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% deposits.forEach(deposit => { %>
+                                        <tr>
+                                            <td><small class="text-muted"><%= deposit.reffId %></small></td>
+                                            <td><%= deposit.method %></td>
+                                            <td>Rp <%= deposit.getBalance.toLocaleString('id-ID') %></td>
+                                            <td><span class="badge fs-08 py-2 px-2 text-uppercase bg-<%= deposit.status === 'success' ? 'success' : (deposit.status === 'pending' ? 'warning text-dark' : 'danger') %>"><%= deposit.status %></span></td>
+                                            <td><small><%= new Date(deposit.createdAt).toLocaleDateString('id-ID', {day:'2-digit',month:'short',year:'numeric'}) %></small></td>
+                                            <td><a href="/user/deposit/status/<%= deposit._id %>" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></a></td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-center text-muted p-3"><i class="fas fa-search-dollar me-2"></i>Anda belum memiliki riwayat deposit.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

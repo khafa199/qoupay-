@@ -1,0 +1,73 @@
+<%- include('../partials/header') %>
+
+<div class="container py-md-5">
+    <h2 class="mb-4"><i class="fas fa-receipt me-2"></i>Status Deposit: #<span class="text-primary"><%= deposit.reffId %></span></h2>
+    <hr class="mb-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary-light">
+            <h5 class="mb-0 text-primary"><i class="fas fa-file-invoice-dollar me-2"></i>Detail Transaksi Deposit</h5>
+        </div>
+        <div class="card-body p-4 p-md-5">
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <p><strong><i class="fas fa-credit-card me-2"></i>Metode:</strong> <%= deposit.method %></p>
+                    <p><strong><i class="fas fa-coins me-2"></i>Nominal Permintaan:</strong> Rp <%= deposit.amount.toLocaleString('id-ID') %></p>
+                    <p><strong><i class="fas fa-percent me-2"></i>Biaya Admin :</strong> Rp <%= deposit.fee.toLocaleString('id-ID') %></p>
+                    <p class="fw-bold fs-5"><strong><i class="fas fa-wallet me-2 text-success"></i>Saldo Akan Diterima:</strong> <span class="text-success">Rp <%= deposit.getBalance.toLocaleString('id-ID') %></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong><i class="fas fa-info-circle me-2"></i>ID :</strong> <span class="text-muted"><%= deposit.forestApiId || 'N/A' %></span></p>
+                    <p><strong><i class="fas fa-hourglass-half me-2"></i>Status:</strong> <span class="badge fs-09 py-2 px-3 text-uppercase bg-<%= deposit.status === 'pending' ? 'warning text-dark' : (deposit.status === 'success' ? 'success' : 'danger') %>"><%= deposit.status %></span></p>
+                    <p><strong><i class="fas fa-calendar-plus me-2"></i>Dibuat pada:</strong> <%= new Date(deposit.createdAt).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short'}) %></p>
+                    <p class="mb-0"><strong><i class="fas fa-calendar-times me-2"></i>Kadaluarsa pada:</strong> <span class="<%= new Date() > new Date(deposit.expiredAt) && deposit.status === 'pending' ? 'text-danger fw-bold' : '' %>"><%= new Date(deposit.expiredAt).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short'}) %></span></p>
+                </div>
+            </div>
+
+            <% if (deposit.status === 'pending' && deposit.qrImageUrl && new Date() < new Date(deposit.expiredAt)) { %>
+                <div class="text-center my-4 p-4 border rounded bg-light shadow-sm">
+                    <h4 class="mb-3 text-primary"><i class="fas fa-qrcode me-2"></i>Scan QR Code untuk Pembayaran</h4>
+                    <div class="qr-code-container">
+                        <img src="<%= deposit.qrImageUrl %>" alt="QR Code Pembayaran">
+                    </div>
+                    <p class="mt-3 text-muted">Atau bayar melalui detail yang muncul di aplikasi e-wallet Anda setelah scan.</p>
+                    <p class="fw-bold text-danger fs-09 mt-2">PENTING: Lakukan pembayaran sebelum <%= new Date(deposit.expiredAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) %> WIB.</p>
+                </div>
+            <% } else if (deposit.status === 'pending' && new Date() >= new Date(deposit.expiredAt)) { %>
+                <div class="alert alert-danger mt-4 p-4 text-center">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                    <h5 class="alert-heading">Waktu Pembayaran Habis!</h5>
+                    <p class="mb-0">Waktu pembayaran untuk deposit ini telah berakhir. Silakan buat permintaan deposit baru jika ingin melanjutkan.</p>
+                </div>
+            <% } else if (deposit.status === 'success') { %>
+                 <div class="alert alert-success mt-4 p-4 text-center">
+                    <i class="fas fa-check-circle fa-2x mb-3"></i>
+                    <h5 class="alert-heading">Deposit Berhasil!</h5>
+                    <p class="mb-0">Saldo Anda telah diperbarui. Terima kasih telah melakukan deposit.</p>
+                </div>
+            <% } else if (deposit.status === 'failed' || deposit.status === 'expired') { %>
+                 <div class="alert alert-danger mt-4 p-4 text-center">
+                     <i class="fas fa-times-circle fa-2x mb-3"></i>
+                    <h5 class="alert-heading">Deposit <%= deposit.status.charAt(0).toUpperCase() + deposit.status.slice(1) %></h5>
+                    <p class="mb-0">Silakan coba lagi atau hubungi admin jika ada kendala.</p>
+                </div>
+            <% } %>
+
+            <div class="mt-5 d-flex justify-content-between align-items-center">
+                <a href="/user/profile" class="btn btn-outline-primary"><i class="fas fa-arrow-left me-2"></i>Kembali ke Profil</a>
+                <% if (deposit.status === 'pending' && new Date() < new Date(deposit.expiredAt)) { %>
+                    <a href="<%= storeWhatsappLink %>?text=Halo Admin, saya ingin konfirmasi deposit dengan ID Internal <%= deposit.reffId %> (ID: <%= deposit.forestApiId %>)" target="_blank" class="btn btn-success">
+                        <i class="fab fa-whatsapp me-2"></i>Konfirmasi via WhatsApp
+                    </a>
+                <% } %>
+            </div>
+             <% if (deposit.status === 'pending' && new Date() < new Date(deposit.expiredAt)) { %>
+                <p class="text-center text-muted small mt-4">
+                    Jika sudah melakukan pembayaran, saldo akan otomatis bertambah setelah pembayaran terkonfirmasi oleh sistem (biasanya beberapa menit).
+                    Jika ada kendala setelah pembayaran, silakan hubungi Admin.
+                </p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

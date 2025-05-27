@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Kelola Pesanan</h1>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>ID Pesanan</th>
+                <th>Pengguna</th>
+                <th>Produk</th>
+                <th>Total Harga</th>
+                <th>Metode Bayar</th>
+                <th>Status</th>
+                <th>Tanggal Pesan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if(orders && orders.length > 0) { %>
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td><small><%= order._id %></small></td>
+                        <td><%= order.user ? order.user.username : 'N/A' %></td>
+                        <td><%= order.product ? order.product.name : 'Produk Dihapus' %></td>
+                        <td>Rp <%= order.totalPrice.toLocaleString('id-ID') %></td>
+                        <td><%= order.paymentMethod %></td>
+                        <td>
+                            <span class="badge bg-<%= order.status === 'paid' || order.status === 'completed' ? 'success' : (order.status === 'pending_payment' ? 'warning' : 'danger') %>">
+                                <%= order.status.replace('_', ' ') %>
+                            </span>
+                        </td>
+                        <td><%= new Date(order.createdAt).toLocaleString('id-ID', {dateStyle:'short', timeStyle:'short'}) %></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7" class="text-center">Belum ada pesanan.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>

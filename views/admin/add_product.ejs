@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Tambah Produk Baru</h1>
+</div>
+
+<form action="/admin/products/add" method="POST">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nama Produk</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= typeof product !== 'undefined' ? product.name : '' %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Deskripsi</label>
+                <textarea class="form-control" id="description" name="description" rows="5" required><%= typeof product !== 'undefined' ? product.description : '' %></textarea>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label for="category" class="form-label">Kategori</label>
+                <select class="form-select" id="category" name="category" required>
+                    <option value="vps" <%= (typeof product !== 'undefined' && product.category === 'vps') ? 'selected' : '' %>>VPS</option>
+                    <option value="pterodactyl_panel" <%= (typeof product !== 'undefined' && product.category === 'pterodactyl_panel') ? 'selected' : '' %>>Pterodactyl Panel</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Harga (Rp)</label>
+                <input type="number" class="form-control" id="price" name="price" step="100" min="0" value="<%= typeof product !== 'undefined' ? product.price : '' %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="stock" class="form-label">Stok</label>
+                <input type="number" class="form-control" id="stock" name="stock" min="0" value="<%= typeof product !== 'undefined' ? product.stock : '10' %>" required>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Simpan Produk</button>
+    <a href="/admin/products" class="btn btn-secondary">Batal</a>
+</form>
+
+<%- include('../partials/footer') %>
